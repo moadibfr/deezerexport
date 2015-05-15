@@ -48,6 +48,8 @@ if __name__ == "__main__":
     parser.add_argument('-j', '--json', '--export', dest = "export",
                         help = "Export playlists in a simple json format"
                                "to the specified file")
+    parser.add_argument('-n', '--playlist-name', dest = "playlist_name",
+                        help = "Name for the playlist to export")
     args = parser.parse_args()
     userdata = get_user_info(args.uid)
     print("Playlists for user %s" % userdata["name"])
@@ -56,6 +58,8 @@ if __name__ == "__main__":
     for row in playlists["data"]:
         playlistid = row["id"]
         playlist = get_playlist(playlistid)
+        if args.playlist_name is not None and not playlist["title"] == args.playlist_name:
+            continue
         playlists_data.append(playlist)
         print("  Playlist %s" % playlist["title"])
         for track in playlist["tracks"]["data"]:
